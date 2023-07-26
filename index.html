@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .container{
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .descricao{
+            margin: 0 auto;
+            padding: 5% 2%;
+            max-width: 600px;
+            text-align: justify;
+            line-height: 30px;
+        }
+    </style>
+    
+    <div class="container"><h2></h2></div>
+    
+
+    <script>
+        fetch('https://api.themoviedb.org/3/movie/popular?api_key=506fadb0256c13349acc05dabebf9604&language=en-US&page=1', {
+            method: 'GET'
+        })
+        .then(Response=>Response.json())
+        .then(function(json){
+            var conteudo = document.querySelector('.container')
+
+            json.results.map(function(val){
+                conteudo.innerHTML += `
+
+            <div  style='font-size:18px; cursor:pointer;' class='movies-title'>
+
+            `+val.title+`
+            <div style='display: none; paddingTop:20px; ' class='descricao'>`
+
+            +val.overview+`
+            </div>
+            <hr>
+
+            </div>
+                `
+            })
+
+            var titulos = document.querySelectorAll('.movies-title')
+            for(var i = 0; i < titulos.length; i++){
+                titulos[i].addEventListener('click', function(t){
+                    if(t.target.querySelector('.descricao').style.display == 'none'){
+                        t.target.querySelector('.descricao').style.display = 'block'
+                    } else{
+                        t.target.querySelector('.descricao').style.display = 'none'
+                    }
+
+                })
+            }
+        })
+
+
+        
+
+
+    </script>
+</body>
+</html>
