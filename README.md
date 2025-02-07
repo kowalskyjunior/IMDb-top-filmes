@@ -1,4 +1,4 @@
-# IMDb Top Filmes
+## IMDb Top Filmes
 
 Este projeto utiliza a API do TMDb para listar os filmes mais populares da atualidade e exibir seus detalhes.
 
