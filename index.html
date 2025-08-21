@@ -1,72 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filmes Populares</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #252542);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      text-align: center;
+      padding: 20px;
+      font-size: 2rem;
+      color: #ffcc00;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .movie-card {
+      background: #2d2d44;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .movie-info {
+      padding: 15px;
+    }
+
+    .movie-info h3 {
+      font-size: 1.2rem;
+      margin: 0 0 10px 0;
+      color: #ffcc00;
+    }
+
+    .rating {
+      background: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .descricao {
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #ddd;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    <style>
-        .container{
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            text-align: center;
-        }
+  <h2>🎬 Filmes Populares</h2>
+  <div class="container"></div>
 
-        .descricao{
-            margin: 0 auto;
-            padding: 5% 2%;
-            max-width: 600px;
-            text-align: justify;
-            line-height: 30px;
-        }
-    </style>
-    
-    <div class="container"><h2></h2></div>
-    
+  <script>
+    fetch('https://api.themoviedb.org/3/movie/popular?api_key=506fadb0256c13349acc05dabebf9604&language=pt-BR&page=1')
+      .then(response => response.json())
+      .then(function(json){
+        var conteudo = document.querySelector('.container')
 
-    <script>
-        fetch('https://api.themoviedb.org/3/movie/popular?api_key=506fadb0256c13349acc05dabebf9604&language=en-US&page=1', {
-            method: 'GET'
-        })
-        .then(Response=>Response.json())
-        .then(function(json){
-            var conteudo = document.querySelector('.container')
-
-            json.results.map(function(val){
-                conteudo.innerHTML += `
-
-            <div  style='font-size:18px; cursor:pointer;' class='movies-title'>
-
-            `+val.title+`
-            <div style='display: none; paddingTop:20px; ' class='descricao'>`
-
-            +val.overview+`
+        json.results.map(function(val){
+          conteudo.innerHTML += `
+            <div class='movie-card'>
+              <img src="https://image.tmdb.org/t/p/w500${val.poster_path}" alt="${val.title}">
+              <div class='movie-info'>
+                <h3>${val.title}</h3>
+                <span class="rating">⭐ ${val.vote_average}</span>
+                <div class='descricao'>${val.overview}</div>
+              </div>
             </div>
-            <hr>
-
-            </div>
-                `
-            })
-
-            var titulos = document.querySelectorAll('.movies-title')
-            for(var i = 0; i < titulos.length; i++){
-                titulos[i].addEventListener('click', function(t){
-                    if(t.target.querySelector('.descricao').style.display == 'none'){
-                        t.target.querySelector('.descricao').style.display = 'block'
-                    } else{
-                        t.target.querySelector('.descricao').style.display = 'none'
-                    }
-
-                })
-            }
+          `
         })
 
-
-        
-
-
-    </script>
+        var filmes = document.querySelectorAll('.movie-card')
+        filmes.forEach(function(card){
+          card.addEventListener('click', function(){
+            let desc = this.querySelector('.descricao')
+            desc.style.display = (desc.style.display === 'block') ? 'none' : 'block'
+          })
+        })
+      })
+  </script>
 </body>
 </html>
